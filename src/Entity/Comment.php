@@ -36,6 +36,10 @@ class Comment
     #[ORM\OneToMany(mappedBy: 'comment', targetEntity: Answer::class, orphanRemoval: true)]
     private $answers;
 
+    #[ORM\ManyToOne(targetEntity: Module::class, inversedBy: 'comments')]
+    #[ORM\JoinColumn(nullable: false)]
+    private $module;
+
     public function __construct()
     {
         $this->answers = new ArrayCollection();
@@ -144,6 +148,18 @@ class Comment
                 $answer->setComment(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getModule(): ?Module
+    {
+        return $this->module;
+    }
+
+    public function setModule(?Module $module): self
+    {
+        $this->module = $module;
 
         return $this;
     }
