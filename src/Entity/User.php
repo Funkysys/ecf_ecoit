@@ -33,6 +33,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToOne(inversedBy: 'user', targetEntity: Professor::class, cascade: ['persist', 'remove'])]
     private $professor;
 
+    #[ORM\Column(type: 'boolean')]
+    private $isProfessor;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -76,6 +79,20 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->roles = $roles;
 
         return $this;
+    }
+
+    public function setIsProfessor (bool $isProfessor) {
+        $this->isProfessor = $isProfessor;
+        if ($this->roles === ["ROLE_PROFESSOR"]) {
+            $this->isProfessor = true;
+        }
+        if ($isProfessor) {
+            return $this->roles[] = "ROLE_PROFESSOR";
+        }
+        if (!$isProfessor) {
+            return $this->roles = array_diff($this->roles, array("ROLE_PROFESSOR"));
+        }
+        return $this->isProfessor;
     }
 
     /**
@@ -134,9 +151,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setProfessor(?Professor $professor): self
     {
         $this->professor = $professor;
-
         return $this;
     }
 
-
+    public function getIsProfessor(): ?bool
+    {
+        return $this->isProfessor;
+    }
 }

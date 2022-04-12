@@ -5,6 +5,9 @@ namespace App\Controller\Admin;
 use App\Entity\User;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
@@ -21,7 +24,10 @@ class UserCrudController extends AbstractCrudController
     {
         return [
             TextField::new('email'),
+            BooleanField::new('isProfessor'),
             ArrayField::new('roles'),
+            AssociationField::new('professor')->autocomplete(),
+            AssociationField::new('student')->autocomplete(),
         ];
     }
 
