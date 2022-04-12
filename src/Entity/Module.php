@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\ModuleRepository;
+use DateTimeImmutable;
+use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -116,24 +118,24 @@ class Module
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
+    public function getCreatedAt(): ?DateTimeImmutable
     {
         return $this->created_at;
     }
 
-    public function setCreatedAt(\DateTimeImmutable $created_at): self
+    public function setCreatedAt(DateTimeImmutable $created_at): self
     {
         $this->created_at = $created_at;
 
         return $this;
     }
 
-    public function getLastUpdate(): ?\DateTimeInterface
+    public function getLastUpdate(): ?DateTimeInterface
     {
         return $this->last_update;
     }
 
-    public function setLastUpdate(?\DateTimeInterface $last_update): self
+    public function setLastUpdate(?DateTimeInterface $last_update): self
     {
         $this->last_update = $last_update;
 

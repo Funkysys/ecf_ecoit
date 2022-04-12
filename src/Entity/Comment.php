@@ -27,7 +27,7 @@ class Comment
     #[ORM\Column(type: 'datetime_immutable')]
     private $created_at;
 
-    #[ORM\ManyToOne(targetEntity: Professor::class, inversedBy: 'comments')]
+    #[ORM\ManyToOne(targetEntity: Professor::class,  inversedBy: 'comments')]
     private $professor;
 
     #[ORM\ManyToOne(targetEntity: Student::class, inversedBy: 'comments')]

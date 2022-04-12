@@ -24,6 +24,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'string')]
     private $password;
 
+    #[ORM\OneToOne(inversedBy: 'user', targetEntity: Admin::class, cascade: ['persist', 'remove'])]
+    private $admin;
+
+    #[ORM\OneToOne(inversedBy: 'user', targetEntity: Student::class, cascade: ['persist', 'remove'])]
+    private $student;
+
+    #[ORM\OneToOne(inversedBy: 'user', targetEntity: Professor::class, cascade: ['persist', 'remove'])]
+    private $professor;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -58,7 +67,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         $roles = $this->roles;
         // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_STUDENT';
 
         return array_unique($roles);
     }
@@ -93,4 +101,42 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
     }
+
+    public function getAdmin(): ?Admin
+    {
+        return $this->admin;
+    }
+
+    public function setAdmin(?Admin $admin): self
+    {
+        $this->admin = $admin;
+
+        return $this;
+    }
+
+    public function getStudent(): ?Student
+    {
+        return $this->student;
+    }
+
+    public function setStudent(?Student $student): self
+    {
+        $this->student = $student;
+
+        return $this;
+    }
+
+    public function getProfessor(): ?Professor
+    {
+        return $this->professor;
+    }
+
+    public function setProfessor(?Professor $professor): self
+    {
+        $this->professor = $professor;
+
+        return $this;
+    }
+
+
 }

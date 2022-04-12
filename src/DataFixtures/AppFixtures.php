@@ -2,6 +2,7 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\Admin;
 use App\Entity\Answer;
 use App\Entity\Comment;
 use App\Entity\Formation;
@@ -32,7 +33,7 @@ class AppFixtures extends Fixture
 
         $user = new User();
         $user->setEmail('professor@test.fr')
-             ->setRoles(['ROLE_PROFESSOR'])
+             ->setRoles(["ROLE_PROFESSOR"])
         ;
         $password = $this->hasher->hashPassword($user, 'pass_4567');
         $user->setPassword($password);
@@ -41,16 +42,22 @@ class AppFixtures extends Fixture
 
         $user2 = new User();
         $user2->setEmail('student@test.fr')
-            ->setRoles(['ROLE_STUDENT'])
+              ->setRoles(["ROLE_STUDENT"])
         ;
         $password = $this->hasher->hashPassword($user2, 'pass_1234');
         $user2->setPassword($password);
 
         $manager->persist($user2);
 
+
+        $admin = new Admin();
+        $admin->setLastname('Delbos');
+        $admin->setFirstname('Antoine');
+
         $user3 = new User();
         $user3->setEmail('admin@test.fr')
-            ->setRoles(['ROLE_ADMIN'])
+              ->setRoles(["ROLE_ADMIN"])
+              ->setAdmin($admin)
         ;
         $password = $this->hasher->hashPassword($user3, 'pass_8910');
         $user3->setPassword($password);
@@ -63,9 +70,12 @@ class AppFixtures extends Fixture
                     ->setDescription($faker->text())
                     ->setAddress($faker->address())
                     ->setCompetences($faker->text())
-                    ->setExperience($faker->numberBetween([2], [15]));
+                    ->setExperience($faker->numberBetween([2], [15]))
+        ;
 
         $manager->persist($professor);
+
+        $user->setProfessor($professor);
 
         $student = new Student();
         $student->setFirstname($faker->firstName())
@@ -75,11 +85,15 @@ class AppFixtures extends Fixture
 
         $manager->persist($student);
 
+        $user2->setStudent($student);
+
         $formation = new Formation();
         $formation  ->setProfessor($professor)
                     ->setDescription($faker->text())
                     ->setTitle($faker->text())
             ;
+
+        $manager->persist($formation);
 
         $section = new Section();
         $section->setFormation($formation)
@@ -87,13 +101,14 @@ class AppFixtures extends Fixture
                 ->setTitle($faker->text())
         ;
 
+        $manager->persist($section);
 
         for ($i = 0; $i < 3; $i++) {
             //test article creation
-            $Module = new Module();
+            $module = new Module();
             $date = new DateTimeImmutable;
 
-            $Module ->setTitle('module de test')
+            $module ->setTitle('module de test')
                     ->setContent($faker->text(350))
                     ->setPDF($faker->image())
                     ->setCreatedAt($date)
@@ -102,37 +117,47 @@ class AppFixtures extends Fixture
                     ->setLastUpdate($date)
                     ->setDescription($faker->text(350))
                     ->setSection($section);
-            $manager->persist($Module);
+            $manager->persist($module);
 
             for ($j = 0; $j < 3; $j++) {
                 $comment = new Comment();
                 $comment->setCreatedAt(new DateTimeImmutable())
-                        ->setProfessor(new Professor())
+                        ->setProfessor($professor)
                         ->setContent($faker->text())
                         ->setTitle($faker->text())
-                        ->setAuthor($faker->name());
+                        ->setAuthor($faker->name())
+                        ->setModule($module)
+                ;
+                $manager->persist($comment);
             }
             for ($k = 0; $k < 2; $k++) {
                 $comment = new Comment();
                 $comment->setCreatedAt(new DateTimeImmutable())
-                        ->setStudent(new Student())
+                        ->setStudent($student)
                         ->setContent($faker->text())
                         ->setTitle($faker->text())
-                        ->setAuthor($faker->name());
+                        ->setAuthor($faker->name())
+                        ->setModule($module)
+                ;
 
                 $manager->persist($comment);
 
                 for ($l = 0; $l < 2; $l++) {
                     $answer = new Answer();
                     $answer ->setCreatedAt(new DateTimeImmutable())
-                            ->setProfessor(new Professor())
+                            ->setProfessor($professor)
                             ->setContent($faker->text())
                             ->setTitle($faker->text())
-                            ->setAuthor($faker->name());
+                            ->setAuthor($faker->name())
+                            ->setComment($comment)
+                    ;
 
                     $manager->persist($answer);
                 }
             }
         }
+
+        $manager->flush();
+
     }
 }
