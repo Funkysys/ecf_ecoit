@@ -51,6 +51,9 @@ class AppCustomAuthenticator extends AbstractLoginFormAuthenticator
 
             return new RedirectResponse($targetPath);
         }
+        if ($user->getRoles() === []) {
+            return new RedirectResponse($this->urlGenerator->generate('app_welcome_professor'));
+        }
         if (in_array("ROLE_PROFESSOR", $user->getRoles(), true)) {
             return new RedirectResponse($this->urlGenerator->generate('professor'));
         }
@@ -65,6 +68,7 @@ class AppCustomAuthenticator extends AbstractLoginFormAuthenticator
 
         // For example:
         //return new RedirectResponse($this->urlGenerator->generate('some_route'));
+        //return new RedirectResponse($this->urlGenerator->generate('app_welcome_professor'));
         throw new \Exception('TODO: provide a valid redirect inside '.__FILE__);
     }
 

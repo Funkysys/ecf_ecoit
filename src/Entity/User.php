@@ -34,7 +34,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $professor;
 
     #[ORM\Column(type: 'boolean')]
-    private $isProfessor;
+    private $isProfessor = false;
 
     public function getId(): ?int
     {
@@ -158,4 +158,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         return $this->isProfessor;
     }
+
+    public function __toString(): string
+    {
+        if ($this->professor === $this->id){
+        return $this->email;
+        }
+        return 'ma bite';
+    }
+
+
 }

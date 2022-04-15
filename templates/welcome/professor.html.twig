@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello BecomeProfessorController!{% endblock %}
+
+{% block body %}
+    {{ form_start(form) }}
+    {{ form_row(form.firstname, {
+        label: 'Prénom'
+    }) }}
+    {{ form_row(form.lastname, {
+        label: 'Nom'
+    }) }}
+    {{ form_row(form.address, {
+        label: 'Adresse'
+    })
+    }}
+    {{ form_row(form.experience, {
+        label: 'Expérience'
+    }) }}
+    {{ form_row(form.competences, {
+        label: 'Compétences'
+    }) }}
+    {{ form_row(form.description, {
+        label: 'Description'
+    }) }}
+
+    <button type="submit" class="btn">Devenir Professeur</button>
+    {{ form_end(form) }}
+{% endblock %}

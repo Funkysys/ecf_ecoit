@@ -7,14 +7,17 @@ use App\Entity\Professor;
 use App\Entity\Section;
 use App\Entity\Student;
 use App\Entity\User;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class AdminDashboardController extends AbstractDashboardController
 {
+    #[IsGranted('ROLE_ADMIN')]
     #[Route('/admin', name: 'admin')]
     public function index(): Response
     {
@@ -51,5 +54,7 @@ class AdminDashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Professor', 'fas fa-newspaper', Professor::class);
         yield MenuItem::linkToCrud('Student', 'fas fa-newspaper', Student::class);
     }
+
+
 
 }

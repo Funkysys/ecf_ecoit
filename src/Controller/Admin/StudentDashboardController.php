@@ -6,11 +6,13 @@ use App\Entity\Formation;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class StudentDashboardController extends AbstractDashboardController
 {
+    #[IsGranted('ROLE_STUDENT')]
     #[Route('/student', name: 'student')]
     public function index(): Response
     {

@@ -1,0 +1,9 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello ProfessorProfileController!{% endblock %}
+
+{% block body %}
+    {{ user_infos.firstname }}
+    {{ user_infos.lastname }}
+    <button class="btn-primary"><a class="link-danger" href="{{ path('app_update_profile') }}">Mettre à jour vos informations</a></button>
+{% endblock %}

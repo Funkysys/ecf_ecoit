@@ -7,10 +7,8 @@ use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 
 class UserCrudController extends AbstractCrudController
 {
@@ -19,16 +17,15 @@ class UserCrudController extends AbstractCrudController
         return User::class;
     }
 
-
     public function configureFields(string $pageName): iterable
     {
         return [
             TextField::new('email'),
-            BooleanField::new('isProfessor'),
-            ArrayField::new('roles'),
-            AssociationField::new('professor')->autocomplete(),
-            AssociationField::new('student')->autocomplete(),
+            TextField::new('password')->onlyOnForms()->setFormType(PasswordType::class),
+            BooleanField::new('isProfessor')->setPermission('ROLE_ADMIN'),
+            ArrayField::new('roles')->setPermission('ROLE_ADMIN'),
+            AssociationField::new('professor')->hideOnForm()->setPermission('ROLE_ADMIN'),
+            AssociationField::new('student')->hideOnForm()->setPermission('ROLE_ADMIN'),
         ];
     }
-
 }

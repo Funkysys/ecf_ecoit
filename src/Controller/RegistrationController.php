@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use App\Entity\Professor;
+use App\Entity\Student;
 use App\Entity\User;
 use App\Form\RegistrationFormType;
 use App\Security\AppCustomAuthenticator;
@@ -38,24 +40,29 @@ class RegistrationController extends AbstractController
                 )
             );
             if ($form->get('becomeTeacher')->getData()) {
-
                 $entityManager->persist($user);
                 $entityManager->flush();
-
-                return $this->redirectToRoute('app_become_professor');
-            }
-
-            $user->setRoles(["ROLE_STUDENT"]);
-
-            $entityManager->persist($user);
-            $entityManager->flush();
-            // do anything else you need here, like send an email
 
                 return $userAuthenticator->authenticateUser(
                     $user,
                     $authenticator,
                     $request
                 );
+            }
+
+            $user->setRoles(["ROLE_STUDENT"]);
+
+            $entityManager->persist($user);
+            $entityManager->flush();
+
+            $userAuthenticator->authenticateUser(
+                $user,
+                $authenticator,
+                $request
+            );
+
+            return $this->redirectToRoute('app_welcome');
+            // do anything else you need here, like send an email
         }
 
         return $this->render('registration/register.html.twig', [
